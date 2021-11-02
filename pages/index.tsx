@@ -25,18 +25,18 @@ const Home: NextPage = () => {
   const [currentTurn, setCurrentTurn] = useState("X")
 
   const resetGame = () => {
-    squareValues = ["", "", "", "", "", "", "", "", ""];
-    setCurrentTurn("X")
-    setGameFinished(false);
+    location.reload()
   }
   const squares = [0, 1, 2, 3, 4, 5, 6, 7, 8]
   const comps = squares.map((square) => (
     <Square key={square} square={square} currentTurn={currentTurn} toggleTurn={() => { toggleTurn(square) }} isFinished={gameFinished} />
   )
   )
-  return <div className={styles.mainBoard}>
-    {comps}
-    <button onClick={resetGame}>Reset Game</button>
+  return <div className={styles.rootdiv}>
+    <div className={styles.mainBoard}>
+      {comps}
+      <button onClick={resetGame}>Reset Game</button>
+    </div>
   </div>
 }
 
