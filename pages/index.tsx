@@ -1,47 +1,57 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Square from '../components/square'
 import styles from '../styles/Home.module.css'
 
-var squareValues = ["", "", "", "", "", "", "", "", ""]
+
 const Home: NextPage = () => {
-
-  const [gameFinished, setGameFinished] = useState(false);
-  function toggleTurn(square: number) {
-    setCurrentTurn(currentTurn === 'X' ? 'O' : 'X')
-    squareValues[square] = currentTurn
+  const [squareValues, setSquareValues] = useState(["", "", "", "", "", "", "", "", ""])
+  //an array called squares from 0-9
+  const [currentTurn, setCurrentTurn] = useState("X")
+  const [isFinished, setIsFinished] = useState(false);
+  function oppositeCurrentTurn() {
+    if (currentTurn === "X") {
+      return "O"
+    } else {
+      return "X"
+    }
+  }
+  useEffect(() => {
     if (checkForWinners(squareValues)) {
-      setGameFinished(true)
-      alert(`${currentTurn} wins!`)
-
-
-
+      alert(`${oppositeCurrentTurn()} has won!`)
+      setIsFinished(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTurn, squareValues])
+  const handleClick = (index: number) => {
+    if (squareValues[index] === "" && !isFinished) {
+      const tempSquares = squareValues.slice();
+      tempSquares[index] = currentTurn;
+      setSquareValues(tempSquares);
+      setCurrentTurn(currentTurn === "X" ? "O" : "X")
 
     }
   }
-  //an array called squares from 0-9
-  const [currentTurn, setCurrentTurn] = useState("X")
-
   const resetGame = () => {
     location.reload()
   }
   const squares = [0, 1, 2, 3, 4, 5, 6, 7, 8]
   const comps = squares.map((square) => (
-    <Square key={square} square={square} currentTurn={currentTurn} toggleTurn={() => { toggleTurn(square) }} isFinished={gameFinished} />
+    <Square key={square} square={square} handleClick={handleClick} value={squareValues[square]} isFinished={isFinished} />
   )
   )
   return <div className={styles.rootdiv}>
     <div className={styles.mainBoard}>
       {comps}
-      <button onClick={resetGame}>Reset Game</button>
+
     </div>
-  </div>
+    <button onClick={resetGame}>Reset Game</button>
+    <h3 className={styles.turntext}>{currentTurn}&apos;s Turn</h3>
+  </div >
 }
 
 
-function checkForWinners(array: string[]) {
+function checkForWinners(array: string[]): boolean {
   var isFull = true;
   for (var str in array) {
     if (str === "") {
