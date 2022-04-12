@@ -1,7 +1,7 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 import styles from '../styles/Home.module.css'
 
-const Square: FunctionComponent<SquareProps> = ({ square, currentTurn, toggleTurn, isFinished, value, handleClick }: SquareProps) => {
+const Square: FunctionComponent<SquareProps> = ({ square, isFinished, value, handleClick }: SquareProps) => {
 
 
     return <div className={styles.square} style={{ cursor: isFinished ? "default" : "pointer" }} onClick={() => handleClick(square)}>
