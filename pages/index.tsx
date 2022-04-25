@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
+// Importing React Hook functions
 import Square from '../components/square'
 import styles from '../styles/Home.module.css'
 
@@ -10,6 +11,7 @@ const Home: NextPage = () => {
   const [currentTurn, setCurrentTurn] = useState("X")
   const [isFinished, setIsFinished] = useState(false);
   const [turnCount, setTurnCount] = useState(0);
+  //The useState hook returns a variable carrying a value and a function used to change the value
   function oppositeCurrentTurn() {
     if (currentTurn === "X") {
       return "O"
@@ -17,28 +19,24 @@ const Home: NextPage = () => {
       return "X"
     }
   }
-  useEffect(() => {
-    if (checkForWinners(squareValues)) {
-      alert(`${oppositeCurrentTurn()} has won!`)
-      setIsFinished(true);
-    }
 
-  }, [currentTurn, squareValues])
+  useEffect(() => {
+    checkForWinners(squareValues)
+  }
+    , [currentTurn, squareValues])
+  //useEffect in React will rerun each time the program sets currentTurn or squareValues
   const handleClick = (index: number) => {
     if (squareValues[index] === "" && !isFinished) {
       const tempSquares = squareValues.slice();
       tempSquares[index] = currentTurn;
       setSquareValues(tempSquares);
-      setCurrentTurn(currentTurn === "X" ? "O" : "X")
+      setCurrentTurn(oppositeCurrentTurn())
       setTurnCount(turnCount + 1)
       console.log(turnCount)
       if (turnCount >= 8) {
         setIsFinished(true);
         alert("No one won.")
       }
-
-
-
     }
   }
   const resetGame = () => {
@@ -57,29 +55,22 @@ const Home: NextPage = () => {
     <button onClick={resetGame}>Reset Game</button>
     <h3 className={styles.turntext}>{currentTurn}&apos;s Turn</h3>
   </div >
-}
 
 
-function checkForWinners(squaresArray: string[]): boolean {
-  var isFull = true;
-  for (var str in squaresArray) {
-    if (str === "") {
-      isFull = false;
-    }
-  }
-
-  if (isFull) {
-    return threeStringsAreSame([squaresArray[0], squaresArray[1], squaresArray[2]]) ||
+  function checkForWinners(squaresArray: string[]): void {
+    if (threeStringsAreSame([squaresArray[0], squaresArray[1], squaresArray[2]]) ||
       threeStringsAreSame([squaresArray[3], squaresArray[4], squaresArray[5]]) ||
       threeStringsAreSame([squaresArray[6], squaresArray[7], squaresArray[8]]) ||
       threeStringsAreSame([squaresArray[0], squaresArray[3], squaresArray[6]]) ||
       threeStringsAreSame([squaresArray[1], squaresArray[4], squaresArray[7]]) ||
       threeStringsAreSame([squaresArray[2], squaresArray[5], squaresArray[8]]) ||
       threeStringsAreSame([squaresArray[0], squaresArray[4], squaresArray[8]]) ||
-      threeStringsAreSame([squaresArray[2], squaresArray[4], squaresArray[6]])
+      threeStringsAreSame([squaresArray[2], squaresArray[4], squaresArray[6]])) {
+      alert(`${oppositeCurrentTurn()} has won!`)
+      setIsFinished(true);
+    }
 
   }
-  return false
 }
 export default Home
 
