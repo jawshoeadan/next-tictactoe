@@ -47,16 +47,27 @@ const Home: NextPage = () => {
     <Square key={square} square={square} handleClick={handleClick} value={squareValues[square]} isFinished={isFinished} />
   )
   )
-  return <div className={styles.rootdiv}>
-    <div className={styles.mainBoard}>
-      {comps}
+  if (!isFinished) {
+    return <div className={styles.rootdiv}>
+      <div className={styles.mainBoard}>
+        {comps}
 
-    </div>
-    <button onClick={resetGame}>Reset Game</button>
-    <h3 className={styles.turntext}>{currentTurn}&apos;s Turn</h3>
-  </div >
+      </div>
 
+      <h3 className={styles.turntext}>{currentTurn}&apos;s Turn</h3>
+    </div >
 
+  }
+  else {
+    return <div className={styles.rootdiv}>
+      <div className={styles.mainBoard}>
+        {comps}
+
+      </div>
+      <button onClick={resetGame}>Reset Game</button>
+
+    </div >
+  }
   function checkForWinners(squaresArray: string[]): void {
     if (threeStringsAreSame([squaresArray[0], squaresArray[1], squaresArray[2]]) ||
       threeStringsAreSame([squaresArray[3], squaresArray[4], squaresArray[5]]) ||
